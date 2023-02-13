@@ -1,0 +1,48 @@
+Student (_idnr_, login, name, program)
+	program → program.name
+
+Program (_name_, mandatoryCourses)
+
+Branch (_name_, mandatoryCourses, recommendedCourses, graduationRequirements)
+
+BranchIn (_student_, branch, program)
+	student → student.idnr
+	program → program.name
+	branch → branch.name
+
+Course (_code_, credits, name)
+
+CourseIn (_course_, department)
+	course → course.code
+	department → department.name
+
+Department (_name_)
+
+ProgramIn (_program_, _department_)
+	program → program.name
+	department → department.name
+
+LimitedCourses(_code_, capacity) 
+	code → Course.code
+
+Classification (_name_)
+
+Classified (_course_, _classification_)
+	course → course.code
+	classification → classification.name
+
+Registered (_course_, _student_)
+	course → course.code
+	student → student.idnr 
+
+Taken ( _course_, _student_, grade)
+	course → course.code
+	student → student.idnr 
+
+Waitinglist (_course_, _student_, position)
+	course → limitedCourse.code
+	student → student.idnr
+
+Prerequisite (_course_, _prerequisite_)
+	course → course.code
+	prerequisite → course.code

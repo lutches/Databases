@@ -1,0 +1,53 @@
+----- Part 1
+
+D ( studentIdnr, studentName, login, branchName, programName, courseCode, courseName, credits, departmentName, capacity, classification, grade, position)
+
+----- Part 2 
+
+studentIdnr studentName login branchName programName courseCode courseName credits departmentName capacity classification grade position
+
+studentIdnr -> studentName
+studentIdnr ->  login
+studentIdnr -> programName
+studentIdnr -> branchName
+
+courseCode -> courseName
+courseCode -> departmentName
+courseCode -> capacity
+courseCode -> credits
+
+studentIdnr courseCode -> position
+studentIdnr courseCode -> grade                             
+
+courseCode position -> studentIdnr
+
+branchName -> programName
+
+
+----- Part 3
+
+{courseCode}* = {courseCode, courseName, credits, departmentName, capacity} != S
+R1 (courseCode, courseName, credits, departmentName, capacity)
+R2 (studentIdnr, studentName, login, branchName, programName, courseCode, classification, grade, position)
+
+{branchName}* = {branchName, programName} != S
+R1 (branchName, programName)
+R2 (studentIdnr, studentName, login, branchName, programName, courseCode, classification, grade, position)
+R3 (courseCode, courseName, credits, departmentName, capacity)
+
+
+{studentIdnr}* = {studentIdnr, studentName, login, branchName} != S
+R1 (studentIdnr, studentName, login, branchName)
+R2 (branchName, programName)
+R3 (studentName, courseCode, classification, grade, position)
+R4 (login, branchName, studentIdnr, studentName)
+
+
+{courseCode, studentIdnr}* = {courseCode, position, studentIdnr, grade} != S
+R1 (courseCode, studentIdnr position, grade)
+R2 (programName, branchName)
+
+----- Part 4
+
+courseCode ->> classification
+

@@ -8,9 +8,10 @@ Create TABLE Students(
 );
 
 Create TABLE Branches (
-    name  TEXT NOT NULL,
-    program TEXT NOT NULL,
-    PRIMARY KEY (name, program) 
+    name  TEXT PRIMARY KEY NOT NULL,
+    mandatoryCourses CHAR(6) NOT NULL,
+    recommendedCourses CHAR(6) NOT NULL,
+    graduationRequirements 
 );
 
 Create Table Courses (
