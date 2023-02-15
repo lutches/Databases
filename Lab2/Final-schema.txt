@@ -4,9 +4,21 @@ Student (_idnr_, login, name, program)
 	UNIQUE (idnr, program)
 		program → program.name
 
-Program (_name_, mandatoryCourses)
+Program (_name_)
 
-Branch (_name_, mandatoryCourses, recommendedCourses, graduationRequirements)
+MandatoryProgram (_program_, _course_)
+	program -> program.name
+	course -> course.code
+
+Branch (_name_)
+
+MandatoryBranch (_branch_,_course_)
+	branch -> branch.name
+	course -> course.code
+
+RecommendedBranch (_branch_,_course_)
+	branch -> branch.name
+	course -> course.code
 
 BranchIn (_student_, branch, program)
 	student → student.idnr
@@ -16,31 +28,31 @@ BranchIn (_student_, branch, program)
 Course (_code_, credits, name)
 
 CourseIn (_course_, department)
-	course → course.code
-	department → department.name
+	course -> course.code
+	department -> department.name
 
 Department (_name_)
 
 ProgramIn (_program_, _department_)
-	program → program.name
-	department → department.name
+	program -> program.name
+	department -> department.name
 
 LimitedCourses(_code_, capacity) 
-	code → Course.code
+	code -> Course.code
 
 Classification (_name_)
 
 Classified (_course_, _classification_)
-	course → course.code
-	classification → classification.name
+	course -> course.code
+	classification -> classification.name
 
 Registered (_course_, _student_)
-	course → course.code
-	student → student.idnr 
+	course -> course.code
+	student -> student.idnr 
 
 Taken ( _course_, _student_, grade)
-	course → course.code
-	student → student.idnr 
+	course -> course.code
+	student -> student.idnr 
 
 Waitinglist (_course_, _student_, position)
 	UNIQUE (course, position)
@@ -48,5 +60,5 @@ Waitinglist (_course_, _student_, position)
 	student → student.idnr
 
 Prerequisite (_course_, _prerequisite_)
-	course → course.code
-	prerequisite → course.code
+	course -> course.code
+	prerequisite -> course.code

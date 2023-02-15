@@ -1,48 +1,62 @@
-Student (_idnr_, login, name, program)
-	program → program.name
+Students (_idnr_, login, name, program)
+	program -> program.name
 
-Program (_name_, mandatoryCourses)
+Programs (_name_)
 
-Branch (_name_, mandatoryCourses, recommendedCourses, graduationRequirements)
+MandatoryProgram (_program_, _course_)
+	program -> program.name
+	course -> courses.code
+
+Branches (_name_, program)
+	program -> programs.name
+
+
+MandatoryBranch (_branch_,_course_)
+	branch -> branch.name
+	course -> courses.code
+
+RecommendedBranch (_branch_,_course_)
+	branch -> branch.name
+	course -> courses.code
 
 BranchIn (_student_, branch, program)
-	student → student.idnr
-	program → program.name
-	branch → branch.name
+	student -> student.idnr
+	program -> program.name
+	branch -> branch.name
 
-Course (_code_, credits, name)
+courses (_code_, credits, name)
 
-CourseIn (_course_, department)
-	course → course.code
-	department → department.name
+courseIn (_course_, department)
+	course -> courses.code
+	department -> departmentes.name
 
-Department (_name_)
+Departmentes (_name_)
 
 ProgramIn (_program_, _department_)
-	program → program.name
-	department → department.name
+	program -> program.name
+	department -> departmentes.name
 
-LimitedCourses(_code_, capacity) 
-	code → Course.code
+Limitedcoursess(_code_, capacity) 
+	code -> courses.code
 
 Classification (_name_)
 
 Classified (_course_, _classification_)
-	course → course.code
-	classification → classification.name
+	course -> courses.code
+	classification -> classification.name
 
 Registered (_course_, _student_)
-	course → course.code
-	student → student.idnr 
+	course -> courses.code
+	student -> student.idnr 
 
 Taken ( _course_, _student_, grade)
-	course → course.code
-	student → student.idnr 
+	course -> courses.code
+	student -> student.idnr 
 
 Waitinglist (_course_, _student_, position)
-	course → limitedCourse.code
-	student → student.idnr
+	course -> limitedcourses.code
+	student -> student.idnr
 
 Prerequisite (_course_, _prerequisite_)
-	course → course.code
-	prerequisite → course.code
+	course -> courses.code
+	prerequisite -> courses.code

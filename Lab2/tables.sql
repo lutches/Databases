@@ -4,14 +4,33 @@ Create TABLE Students(
     idnr CHAR(10) PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
     login TEXT NOT NULL UNIQUE,
-    program TEXT NOT NULL
+    program TEXT NOT NULL,
+    FOREIGN KEY (program) REFERENCES programs(name),
+    UNIQUE (idnr, program)
+);
+
+Create TABLE programs (
+    name TEXT PRIMARY KEY NOT NULL,
+);
+
+Create Table MandatoryProgram (
+    course CHAR(6) NOT NULL,
+    program TEXT NOT NULL,
+    PRIMARY KEY (course, program),
+    FOREIGN KEY (course) REFERENCES Courses(code)
 );
 
 Create TABLE Branches (
     name  TEXT PRIMARY KEY NOT NULL,
-    mandatoryCourses CHAR(6) NOT NULL,
-    recommendedCourses CHAR(6) NOT NULL,
-    graduationRequirements 
+);
+
+Create Table MandatoryBranch (
+    Course CHAR(6) NOT NULL,
+    branch TEXT NOT NULL,
+    program TEXT NOT NULL,
+    PRIMARY KEY (course, branch, program),
+    FOREIGN KEY (course) REFERENCES Courses(code),
+    FOREIGN KEY (branch, program) REFERENCES Branches(name, program)
 );
 
 Create Table Courses (
@@ -47,21 +66,9 @@ Create Table Classified (
     FOREIGN KEY (classification) REFERENCES classifications(name)
 );
 
-Create Table MandatoryProgram (
-    course CHAR(6) NOT NULL,
-    program TEXT NOT NULL,
-    PRIMARY KEY (course, program),
-    FOREIGN KEY (course) REFERENCES Courses(code)
-);
 
-Create Table MandatoryBranch (
-    Course CHAR(6) NOT NULL,
-    branch TEXT NOT NULL,
-    program TEXT NOT NULL,
-    PRIMARY KEY (course, branch, program),
-    FOREIGN KEY (course) REFERENCES Courses(code),
-    FOREIGN KEY (branch, program) REFERENCES Branches(name, program)
-);
+
+
 
 Create Table RecommendedBranch(
     course CHAR(6) NOT NULL,
