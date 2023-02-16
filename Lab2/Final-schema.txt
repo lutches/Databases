@@ -1,64 +1,59 @@
-Student (_idnr_, login, name, program)
-	program → program.name
-	UNIQUE login
+Students (_idnr_, login, name, program)
+    program -> programs.name
+    UNIQUE login
 	UNIQUE (idnr, program)
-		program → program.name
+		program → programs.name
 
-Program (_name_)
+Programs (_name_, _department_)
+	department -> departments.name
 
 MandatoryProgram (_program_, _course_)
-	program -> program.name
-	course -> course.code
+	program -> programs.name
+	course -> courses.code
 
-Branch (_name_)
+Branches (_name_,_program_)
+	program -> programs.name
 
 MandatoryBranch (_branch_,_course_)
-	branch -> branch.name
-	course -> course.code
+	branch -> branches.name
+	course -> courses.code
 
 RecommendedBranch (_branch_,_course_)
-	branch -> branch.name
-	course -> course.code
+	branch -> branches.name
+	course -> courses.code
 
-BranchIn (_student_, branch, program)
-	student → student.idnr
-	(branch, program) → branch.(name, program)
-		(student, program) → student.(idnr, program)
+StudentBranches (_student_, branch, program)
+	student → students.idnr
+	(branch, program) → branches.(name, program)
+		(student, program) → students.(idnr, program)
 
-Course (_code_, credits, name)
+courses (_code_, credits, name, department)
+	department -> departments.name
 
-CourseIn (_course_, department)
-	course -> course.code
-	department -> department.name
+Departments (_name_)
 
-Department (_name_)
-
-ProgramIn (_program_, _department_)
-	program -> program.name
-	department -> department.name
-
-LimitedCourses(_code_, capacity) 
-	code -> Course.code
+Limitedcourses(_code_, capacity) 
+	code -> courses.code
 
 Classification (_name_)
 
 Classified (_course_, _classification_)
-	course -> course.code
+	course -> courses.code
 	classification -> classification.name
 
 Registered (_course_, _student_)
-	course -> course.code
-	student -> student.idnr 
+	course -> courses.code
+	student -> students.idnr 
 
 Taken ( _course_, _student_, grade)
-	course -> course.code
-	student -> student.idnr 
+	course -> courses.code
+	student -> students.idnr 
 
 Waitinglist (_course_, _student_, position)
-	UNIQUE (course, position)
-	course → limitedCourse.code
-	student → student.idnr
+    UNIQUE (course, position)
+	course -> limitedcourses.code
+	student -> students.idnr
 
 Prerequisite (_course_, _prerequisite_)
-	course -> course.code
-	prerequisite -> course.code
+	course -> courses.code
+	prerequisite -> courses.code
