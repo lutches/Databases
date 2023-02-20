@@ -1,22 +1,27 @@
 Students (_idnr_, login, name, program)
     program -> programs.name
 
-Programs (_name_, _department_)
+Programs (_name_)
+
+ProgramIN (_program, _department_)
+	program -> programs.name
 	department -> departments.name
 
 MandatoryProgram (_program_, _course_)
 	program -> programs.name
 	course -> courses.code
 
-Branches (_name_,_program_)
-	program -> programs.name
+Branches (_name_, _program_)
 
-MandatoryBranch (_branch_,_course_)
+
+
+MandatoryBranch (_branch_,_course_,_program_)
 	branch -> branches.name
 	course -> courses.code
+	program -> branches.program
 
-RecommendedBranch (_branch_,_course_)
-	branch -> branches.name
+RecommendedBranch (_branch_,_course_,_program_)
+	(branch, program) -> branches.(name, program)
 	course -> courses.code
 
 StudentBranches (_student_, branch, program)
@@ -32,7 +37,7 @@ Departments (_name_)
 Limitedcourses(_code_, capacity) 
 	code -> courses.code
 
-Classification (_name_)
+Classifications (_name_)
 
 Classified (_course_, _classification_)
 	course -> courses.code

@@ -1,11 +1,23 @@
+Departments (_name_)
+
+Programs (_name_)
+
+ProgramIN (_program_, _department_)
+	program -> programs.name
+	department -> departmentes.name
+
+courses (_code_, credits, name, department)
+	department -> departments.name
+
+Prerequisite (_course_, _prerequisite_)
+	course -> courses.code
+	prerequisite -> courses.code
+
 Students (_idnr_, login, name, program)
     program -> programs.name
     UNIQUE login
 	UNIQUE (idnr, program)
 		program → programs.name
-
-Programs (_name_, _department_)
-	department -> departments.name
 
 MandatoryProgram (_program_, _course_)
 	program -> programs.name
@@ -14,36 +26,38 @@ MandatoryProgram (_program_, _course_)
 Branches (_name_,_program_)
 	program -> programs.name
 
-MandatoryBranch (_branch_,_course_)
+MandatoryBranch (_branch_,_course_,_program_)
 	branch -> branches.name
 	course -> courses.code
+	program -> branches.program
 
-RecommendedBranch (_branch_,_course_)
-	branch -> branches.name
-	course -> courses.code
+Limitedcourses(_code_, capacity) 
+	code -> courses.code
+
+
 
 StudentBranches (_student_, branch, program)
 	student → students.idnr
 	(branch, program) → branches.(name, program)
 		(student, program) → students.(idnr, program)
 
-courses (_code_, credits, name, department)
-	department -> departments.name
 
-Departments (_name_)
+Classifications (_name_)
 
-Limitedcourses(_code_, capacity) 
-	code -> courses.code
-
-Classification (_name_)
 
 Classified (_course_, _classification_)
 	course -> courses.code
 	classification -> classification.name
 
+RecommendedBranch (_branch_,_course_,_program_)
+	branch -> branches.name
+	course -> courses.code
+	program -> branches.program
+
 Registered (_course_, _student_)
 	course -> courses.code
 	student -> students.idnr 
+
 
 Taken ( _course_, _student_, grade)
 	course -> courses.code
@@ -54,6 +68,3 @@ Waitinglist (_course_, _student_, position)
 	course -> limitedcourses.code
 	student -> students.idnr
 
-Prerequisite (_course_, _prerequisite_)
-	course -> courses.code
-	prerequisite -> courses.code

@@ -1,3 +1,8 @@
+INSERT INTO Departments VALUES ('Dep1');
+
+INSERT INTO Programs VALUES ('Prog1');
+INSERT INTO Programs VALUES ('Prog2');
+
 INSERT INTO Branches VALUES ('B1','Prog1');
 INSERT INTO Branches VALUES ('B2','Prog1');
 INSERT INTO Branches VALUES ('B1','Prog2');
