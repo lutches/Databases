@@ -11,6 +11,8 @@ studentIdnr ->  login
 studentIdnr -> programName
 studentIdnr -> branchName
 
+login -> studentIdnr
+
 courseCode -> courseName
 courseCode -> departmentName
 courseCode -> capacity
@@ -21,33 +23,137 @@ studentIdnr courseCode -> grade
 
 courseCode position -> studentIdnr
 
-branchName -> programName
 
 
------ Part 3
+----- Part 3 ------
+1. Attributes:
+courseCode courseName credits departmentName capacity
+Keys:
+courseCode
 
-{courseCode}* = {courseCode, courseName, credits, departmentName, capacity} != S
-R1 (courseCode, courseName, credits, departmentName, capacity)
-R2 (studentIdnr, studentName, login, branchName, programName, courseCode, classification, grade, position)
+Functional dependencies:
+courseCode -> courseName
+courseCode -> credits
+courseCode -> departmentName
+courseCode -> capacity
+courseCode capacity -> courseName
+courseCode capacity -> credits
+courseCode capacity -> departmentName
+courseCode departmentName -> courseName
+courseCode departmentName -> credits
+courseCode departmentName -> capacity
+courseCode departmentName capacity -> courseName
+courseCode departmentName capacity -> credits
+courseCode credits -> courseName
+courseCode credits -> departmentName
+courseCode credits -> capacity
+courseCode credits capacity -> courseName
+courseCode credits capacity -> departmentName
+courseCode credits departmentName -> courseName
+courseCode credits departmentName -> capacity
+courseCode credits departmentName capacity -> courseName
+courseCode courseName -> credits
+courseCode courseName -> departmentName
+courseCode courseName -> capacity
+courseCode courseName capacity -> credits
+courseCode courseName capacity -> departmentName
+courseCode courseName departmentName -> credits
+courseCode courseName departmentName -> capacity
+courseCode courseName departmentName capacity -> credits
+courseCode courseName credits -> departmentName
+courseCode courseName credits -> capacity
+courseCode courseName credits capacity -> departmentName
+courseCode courseName credits departmentName -> capacity
 
-{branchName}* = {branchName, programName} != S
-R1 (branchName, programName)
-R2 (studentIdnr, studentName, login, branchName, programName, courseCode, classification, grade, position)
-R3 (courseCode, courseName, credits, departmentName, capacity)
 
 
-{studentIdnr}* = {studentIdnr, studentName, login, branchName} != S
-R1 (studentIdnr, studentName, login, branchName)
-R2 (branchName, programName)
-R3 (studentName, courseCode, classification, grade, position)
-R4 (login, branchName, studentIdnr, studentName)
+2. Attributes:
+login studentIdnr studentName branchName programName
+Keys:
+studentIdnr
+login
+
+Functional dependencies:
+login -> studentIdnr
+login -> studentName
+login -> branchName
+login -> programName
+login programName -> studentIdnr
+login programName -> studentName
+login programName -> branchName
+login branchName -> studentIdnr
+login branchName -> studentName
+login branchName -> programName
+login branchName programName -> studentIdnr
+login branchName programName -> studentName
+studentName login -> studentIdnr
+studentName login -> branchName
+studentName login -> programName
+studentName login programName -> studentIdnr
+studentName login programName -> branchName
+studentName login branchName -> studentIdnr
+studentName login branchName -> programName
+studentName login branchName programName -> studentIdnr
+studentIdnr -> studentName
+studentIdnr -> login
+studentIdnr -> branchName
+studentIdnr -> programName
+studentIdnr programName -> studentName
+studentIdnr programName -> login
+studentIdnr programName -> branchName
+studentIdnr branchName -> studentName
+studentIdnr branchName -> login
+studentIdnr branchName -> programName
+studentIdnr branchName programName -> studentName
+studentIdnr branchName programName -> login
+studentIdnr login -> studentName
+studentIdnr login -> branchName
+studentIdnr login -> programName
+studentIdnr login programName -> studentName
+studentIdnr login programName -> branchName
+studentIdnr login branchName -> studentName
+studentIdnr login branchName -> programName
+studentIdnr login branchName programName -> studentName
+studentIdnr studentName -> login
+studentIdnr studentName -> branchName
+studentIdnr studentName -> programName
+studentIdnr studentName programName -> login
+studentIdnr studentName programName -> branchName
+studentIdnr studentName branchName -> login
+studentIdnr studentName branchName -> programName
+studentIdnr studentName branchName programName -> login
+studentIdnr studentName login -> branchName
+studentIdnr studentName login -> programName
+studentIdnr studentName login programName -> branchName
+studentIdnr studentName login branchName -> programName
 
 
-{courseCode, studentIdnr}* = {courseCode, position, studentIdnr, grade} != S
-R1 (courseCode, studentIdnr position, grade)
-R2 (programName, branchName)
+
+3. Attributes:
+courseCode position login grade
+Keys:
+courseCode login
+courseCode position
+
+Functional dependencies:
+courseCode login -> position
+courseCode login -> grade
+courseCode login grade -> position
+courseCode position -> login
+courseCode position -> grade
+courseCode position grade -> login
+courseCode position login -> grade
+
+
+
+4. Attributes:
+courseCode classification position
+Keys:
+courseCode classification position
+
+Functional dependencies:
+none
+
 
 ----- Part 4
-
-courseCode ->> classification
 
