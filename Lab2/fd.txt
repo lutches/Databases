@@ -157,3 +157,18 @@ none
 
 ----- Part 4
 
+
+X ->> Y
+
+{ courseCode }* = { courseCode, classification }
+
+X = { courseCode }
+X* = { courseCode, classification }
+Y = { classification }
+
+R1(courseCode, courseName, departmentName, capacity, credits)
+R2(studentIdnr, studentName, login, branchName)
+R3(studentIdnr, courseCode, grade, position)
+R4(courseCode, classification)
+R5(courseCode, studentIdnr)
+
