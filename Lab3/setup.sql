@@ -1,3 +1,8 @@
+-- prep work
+drop schema public CASCADE;
+create Schema public;
+
+
 ------ tables -------
 
 Create TABLE Departments (
@@ -8,12 +13,12 @@ Create TABLE Programs (
     name TEXT NOT NULL PRIMARY KEY
 );
 
-CREATE TABLE ProgramIn (
+Create TABLE ProgramIn (
     program TEXT NOT NULL REFERENCES Programs(name),
     department TEXT NOT NULL REFERENCES Departments(name)
 );
 
-Create Table Courses (
+Create TABLE Courses (
     code CHAR(6) PRIMARY KEY NOT NULL,
     name TEXT NOT NULL,
     credits Float NOT NULL,
@@ -34,7 +39,7 @@ Create TABLE Students(
     UNIQUE(idnr, program)
 );
 
-Create Table MandatoryProgram (
+Create TABLE MandatoryProgram (
     course CHAR(6) NOT NULL,
     program TEXT NOT NULL,
     PRIMARY KEY (course, program),
@@ -47,7 +52,7 @@ Create TABLE Branches (
     PRIMARY KEY (name, program)
 );
 
-Create Table MandatoryBranch (
+Create TABLE MandatoryBranch (
     course CHAR(6) NOT NULL,
     branch TEXT NOT NULL,
     program TEXT NOT NULL,
@@ -56,13 +61,13 @@ Create Table MandatoryBranch (
     FOREIGN KEY (branch, program) REFERENCES Branches(name, program)
 );
 
-Create Table LimitedCourses (
+Create TABLE LimitedCourses (
     code CHAR(6) PRIMARY KEY NOT NULL, 
     capacity INTEGER NOT NULL,
     FOREIGN KEY (code) REFERENCES Courses(code)
 );
 
-Create Table StudentBranches (
+Create TABLE StudentBranches (
     student CHAR(10) PRIMARY KEY NOT NULL,
     branch TEXT NOT NULL,
     program TEXT NOT NULL,
@@ -71,11 +76,11 @@ Create Table StudentBranches (
     FOREIGN KEY (student, program) REFERENCES Students(idnr, program)
 );
 
-Create Table classifications (
+Create TABLE classifications (
     name Text PRIMARY KEY NOT NULL
 );
 
-Create Table Classified ( 
+Create TABLE Classified ( 
     course CHAR(6) NOT NULL,
     classification TEXT NOT NULL,
     PRIMARY KEY (course, classification),
@@ -83,7 +88,7 @@ Create Table Classified (
     FOREIGN KEY (classification) REFERENCES classifications(name)
 );
 
-Create Table RecommendedBranch(
+Create TABLE RecommendedBranch(
     course CHAR(6) NOT NULL,
     branch TEXT NOT NULL,
     program TEXT NOT NULL,
@@ -92,7 +97,7 @@ Create Table RecommendedBranch(
     FOREIGN KEY (course) REFERENCES Courses(code)
 );
 
-Create Table Registered (
+Create TABLE Registered (
     student CHAR(10) NOT NULL,
     course CHAR(6) NOT NULL,
     PRIMARY KEY (student, course),
@@ -100,14 +105,14 @@ Create Table Registered (
     FOREIGN KEY (course) REFERENCES Courses(code)
 );
 
-CREATE TABLE Taken (
+Create TABLE Taken (
     student VARCHAR(16) REFERENCES Students,
     course CHAR(6) NOT NULL REFERENCES Courses,
     grade CHAR(1) NOT NULL CHECK (grade IN ('U', '3', '4', '5')),
     PRIMARY KEY (student, course)
 );
 
-Create Table WaitingList (
+Create TABLE WaitingList (
     student CHAR(10) NOT NULL REFERENCES Students(idnr),
     course CHAR(6) NOT NULL REFERENCES LimitedCourses(code),
     position Serial Not Null,
@@ -116,27 +121,27 @@ Create Table WaitingList (
 
 ------ views ------
 
-Create View BasicInformation AS (
+Create or Replace View BasicInformation AS (
     Select Students.idnr, Students.name, Students.login, Students.program, StudentBranches.branch
     From Students
     Left Join StudentBranches ON StudentBranches.student = Students.idnr
 
 );
 
-Create View FinishedCourses As (
+Create or Replace View FinishedCourses As (
     Select Student, course, grade, credits
     From Students
     Join Taken On idnr = Taken.Student
     Join Courses ON course = Courses.code
 );
 
-Create View PassedCourses AS ( 
+Create or Replace View PassedCourses AS ( 
     Select student, course, credits
     From FinishedCourses
     where grade != 'U'
 );
 
-Create View Registrations AS (
+Create or Replace View Registrations AS (
     Select Student, Course, 'registered' AS status
     From Registered
     UNION
@@ -145,7 +150,7 @@ Create View Registrations AS (
 );
 
 
-Create View UnreadMandatory AS (
+Create or Replace View UnreadMandatory AS (
     With MandatoryCourses  
     AS (SELECT idnr, basicinformation.program, basicinformation.branch, course
         FROM basicinformation
@@ -166,7 +171,7 @@ Create View UnreadMandatory AS (
 );
 
 
-Create View PathToGraduation AS (
+Create or Replace View PathToGraduation AS (
     With SumCredits AS (
     Select PassedCourses.student, Sum(credits) AS totalCredits
     From PassedCourses
@@ -236,9 +241,7 @@ Create View PathToGraduation AS (
     LEFT JOIN recommendedCredits ON idnr=recommendedCredits.student
 );
 
-Create view CourseQueuePosition As (
-    Select course, student, place
-)
+
 
 ------ inserts ------
 
