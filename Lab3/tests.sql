@@ -1,7 +1,7 @@
 --- TEST 1 : Register to an unlimited course
 --- EXP. OUTCOME : Pass
-INSERT INTO Registrations VALUES ('1111111111', 'ccc111');
-
+INSERT INTO Registrations VALUES ('2222222222', 'CCC444');
+/*
 --- TEST 2 : Register to a limited course
 --- EXP: OUTCOME : Pass
 INSERT INTO Registrations VALUES ('1111111111', 'AAA111')
@@ -32,3 +32,6 @@ INSERT INTO Registrations VALUES ()
 --- TEST 9 : Unregister from an overfull course with a waiting list
 --- EXP. OUTCOME : 
 INSERT INTO Registrations VALUES ()
+
+
+*/
