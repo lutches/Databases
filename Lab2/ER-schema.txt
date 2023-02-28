@@ -24,14 +24,11 @@ Branches (_name_,_program_)
 	program -> programs.name
 
 MandatoryBranch (_branch_,_course_,_program_)
-	branch -> branches.name
 	course -> courses.code
-	program -> branches.program
+	(branch, program) -> branches.(name, program)
 
 Limitedcourses(_code_, capacity) 
 	code -> courses.code
-
-
 
 StudentBranches (_student_, branch, program)
 	student → students.idnr
@@ -46,9 +43,8 @@ Classified (_course_, _classification_)
 	classification -> classification.name
 
 RecommendedBranch (_branch_,_course_,_program_)
-	branch -> branches.name
 	course -> courses.code
-	program -> branches.program
+	(branch, program) -> branches.(name, program)
 
 Registered (_course_, _student_)
 	course -> courses.code
