@@ -1,0 +1,11 @@
+{
+    "python.analysis.typeCheckingMode": "basic",
+    "C_Cpp.default.windowsSdkVersion": "",
+    "C_Cpp.default.includePath": [
+        "/Users/lukasakefeldt/Programming/Databases-1/Lab4/lib/postgresql-42.5.4.jar"
+    ],
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "Lab4/lib/postgresql-42.5.4.jar"
+    ]
+}
