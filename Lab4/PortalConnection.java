@@ -1,4 +1,3 @@
-
 import java.sql.*; // JDBC stuff.
 import java.util.Properties;
 
@@ -6,7 +5,7 @@ public class PortalConnection {
 
     // Set this to e.g. "portal" if you have created a database named portal
     // Leave it blank to use the default database of your database user
-    static final String DBNAME = "";
+    static final String DBNAME = "postgres";
     // For connecting to the portal database on your local machine
     static final String DATABASE = "jdbc:postgresql://localhost/"+DBNAME;
     static final String USERNAME = "postgres";
@@ -36,20 +35,38 @@ public class PortalConnection {
 
 
     // Register a student on a course, returns a tiny JSON document (as a String)
-    public String register(String student, String courseCode){
-      
-      // placeholder, remove along with this comment. 
-      return "{\"success\":false, \"error\":\"Registration is not implemented yet :(\"}";
-      
-      // Here's a bit of useful code, use it or delete it 
-      // } catch (SQLException e) {
-      //    return "{\"success\":false, \"error\":\""+getError(e)+"\"}";
-      // }     
-    }
+    public String register(String student, String courseCode)
+    {
+      try (PreparedStatement registerStudent = conn.prepareStatement("INSERT INTO registrations VALUES (?,?);"))
+        {
+          registerStudent.setString(1, student);
+          registerStudent.setString(2, courseCode);
+          registerStudent.executeUpdate();
+          return "{\"Sucess\" : True}";
+        }
+        catch (SQLException e)
+          {
+            return String.format("{\"success\":false, \"error\":\""+getError(e)+"\"}");
+          }
 
+    }
     // Unregister a student from a course, returns a tiny JSON document (as a String)
-    public String unregister(String student, String courseCode){
-      return "{\"success\":false, \"error\":\"Unregistration is not implemented yet :(\"}";
+    public String unregister(String student, String courseCode)
+    {
+      try (PreparedStatement unregisterStudent = conn.prepareStatement("DELETE FROM registrations WHERE student='%s' AND course='%s'");)
+        {
+          unregisterStudent.setString(1, student);
+          unregisterStudent.setString(2, courseCode);
+          int updatedRows = unregisterStudent.executeUpdate();
+          if (updatedRows > 0)
+            return String.format("{\"sucess\": true}");
+          else
+            return String.format("{\"success\":false, \"error\":\"Not registered to course\"}");
+        }
+        catch (SQLException e)
+          {
+            return String.format("{\"sucess\": false, \"error\": \"%s\"}", getError(e));
+          }
     }
 
     // Return a JSON document containing lots of information about a student, it should validate against the schema found in information_schema.json
