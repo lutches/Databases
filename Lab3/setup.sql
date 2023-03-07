@@ -288,7 +288,7 @@ INSERT INTO LimitedCourses VALUES ('CCC222', 1);
 INSERT INTO LimitedCourses VALUES ('CCC333', 0);
 INSERT INTO LimitedCourses VALUES ('CCC444', 0);
 INSERT INTO LimitedCourses VALUES ('CCC666', 1);
-INSERT INTO LimitedCourses VALUES ('CCC777', 1);
+INSERT INTO LimitedCourses VALUES ('CCC777', 0);
 INSERT INTO LimitedCourses VALUES ('CCC888', 0);
 INSERT INTO LimitedCourses VALUES ('CCC999', 0);
 
