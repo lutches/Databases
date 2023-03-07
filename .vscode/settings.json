@@ -6,6 +6,7 @@
     ],
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "Lab4/lib/postgresql-42.5.4.jar"
+        "Lab4/lib/postgresql-42.5.4.jar",
+        "Lab4/lib/json-20230227.jar"
     ]
 }

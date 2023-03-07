@@ -1,6 +1,9 @@
+import org.json.JSONObject;
+import org.json.JSONObject;
+
 import java.sql.*; // JDBC stuff.
 import java.util.Properties;
-import 
+
 
 public class PortalConnection {
 
@@ -72,22 +75,32 @@ public class PortalConnection {
 
     // Return a JSON document containing lots of information about a student, it should validate against the schema found in information_schema.json
     public String getInfo(String student) throws SQLException{
-        
-        try(PreparedStatement st = conn.prepareStatement(
-            // replace this with something more useful
-            "SELECT jsonb_build_object('student',idnr,'name',name) AS jsondata FROM BasicInformation WHERE idnr=?"
-            );){
+
+        JSONObject jobject = new JSONObject();
+
+        try(PreparedStatement st = conn.prepareStatement
+          (
+            "SELECT * FROM basicinformation JOIN pathtograduation on idnr=student WHERE idnr=?;"
+          );)
+            {
+              st.setString(1, student);
+              
+              ResultSet rs = st.executeQuery();
+              
+              if(rs.next())
+                {
+                  jobject.put("Student", rs.getString(1));
+                  jobject.put("Name", rs.getString(2));
+                  jobject.put("Login", rs.getString(3));
+                  jobject.put("Program", rs.getString(4));
+                  jobject.put("Branch", rs.getString(5));
+
+                }
+                return rs.getString("jsondata");
+              else
+                return "{\"student\":\"does not exist :(\"}"; 
             
-            st.setString(1, student);
-            
-            ResultSet rs = st.executeQuery();
-            
-            if(rs.next())
-              return rs.getString("jsondata");
-            else
-              return "{\"student\":\"does not exist :(\"}"; 
-            
-        } 
+            } 
     }
 
     // This is a hack to turn an SQLException into a JSON string error message. No need to change.
