@@ -12,12 +12,17 @@ public class TestPortal {
    
          // Write your tests here. Add/remove calls to pause() as desired. 
          // Use println instead of prettyPrint to get more compact output (if your raw JSON is already readable)
+         
 
-         System.out.println(c.unregister("2222222222", "CCC333")); 
+         System.out.println(c.getInfo("1111111111")); 
+		pause();
+         /*System.out.println(c.unregister("2222222222", "CCC333")); 
          pause();
 
          prettyPrint(c.getInfo("2222222222")); 
          pause();
+
+
 
          System.out.println(c.register("2222222222", "CCC333")); 
          pause();
@@ -25,7 +30,7 @@ public class TestPortal {
          prettyPrint(c.getInfo("2222222222"));
 
 
-
+*/
       
       } catch (ClassNotFoundException e) {
          System.err.println("ERROR!\nYou do not have the Postgres JDBC driver (e.g. postgresql-42.5.1.jar) in your runtime classpath!");

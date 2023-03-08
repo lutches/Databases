@@ -1,6 +1,5 @@
 package src;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 import org.json.JSONObject;
 
 import java.sql.*; // JDBC stuff.
@@ -83,7 +82,7 @@ public class PortalConnection {
 
         try(PreparedStatement st = conn.prepareStatement
           (
-            "SELECT* FROM basicinformation ON idnr=student WHERE idnr=?;"
+            "SELECT* FROM basicinformation WHERE idnr=?;"
           );)
             {
               st.setString(1, student);
@@ -172,7 +171,7 @@ public class PortalConnection {
             } 
 
 
-
+          System.out.println(jobject);
           return jobject.toString();
     }
             
