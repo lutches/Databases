@@ -1,3 +1,5 @@
+package src;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONObject;
 
@@ -74,13 +76,14 @@ public class PortalConnection {
     }
 
     // Return a JSON document containing lots of information about a student, it should validate against the schema found in information_schema.json
-    public String getInfo(String student) throws SQLException{
+    public String getInfo(String student) throws SQLException
+    {
 
         JSONObject jobject = new JSONObject();
 
         try(PreparedStatement st = conn.prepareStatement
           (
-            "SELECT * FROM basicinformation JOIN pathtograduation on idnr=student WHERE idnr=?;"
+            "SELECT* FROM basicinformation ON idnr=student WHERE idnr=?;"
           );)
             {
               st.setString(1, student);
@@ -88,20 +91,91 @@ public class PortalConnection {
               ResultSet rs = st.executeQuery();
               
               if(rs.next())
-                {
-                  jobject.put("Student", rs.getString(1));
-                  jobject.put("Name", rs.getString(2));
-                  jobject.put("Login", rs.getString(3));
-                  jobject.put("Program", rs.getString(4));
-                  jobject.put("Branch", rs.getString(5));
-
-                }
-                return rs.getString("jsondata");
-              else
-                return "{\"student\":\"does not exist :(\"}"; 
-            
+              {
+                jobject.put("Student", rs.getString(1));
+                jobject.put("Name", rs.getString(2));
+                jobject.put("Login", rs.getString(3));
+                jobject.put("Program", rs.getString(4));
+                jobject.put("Branch", rs.getString(5));
+              }
+              rs.close();
+              
             } 
+
+        try(PreparedStatement st = conn.prepareStatement
+            (
+              "SELECT * FROM finishedcourses JOIN courses ON course=code WHERE student=?;"
+            );)
+            {
+              st.setString(1, student);
+              
+              ResultSet rs = st.executeQuery();
+              
+              while(rs.next())
+              {
+                JSONObject jarrobject = new JSONObject();
+                jarrobject.put("Course", rs.getString(6));
+                jarrobject.put("Code", rs.getString(2));
+                jarrobject.put("Credits", rs.getDouble(4));
+                jarrobject.put("Grade", rs.getString(3));
+              
+                jobject.append("Finished", jarrobject);
+              }
+              rs.close();
+            }
+          try(PreparedStatement st = conn.prepareStatement
+            (
+              "SELECT name, code, status, place from registrations JOIN courses on course=code LEFT JOIN coursequeuepositions on coursequeuepositions.course = code and registrations.student = coursequeuepositions.student WHERE registrations.student=?;"
+            );)
+            {
+              st.setString(1, student);
+              
+              ResultSet rs = st.executeQuery();
+              
+              while(rs.next())
+              {
+                String status = rs.getString(3);
+                JSONObject jarrobject = new JSONObject();
+                jarrobject.put("Course name", rs.getString(1));
+                jarrobject.put("Course code", rs.getString(2));
+                jarrobject.put("Registration status", status);
+				              if (status.equals("waiting"))
+                {
+					            jarrobject.put("Position", rs.getInt(4));
+				        }
+	
+
+              
+                jobject.append("Registered", jarrobject);
+              }
+              rs.close();
+            }
+            try(PreparedStatement st = conn.prepareStatement
+            (
+              "SELECT * from pathtograduation where student=?;"
+            );)
+            {
+              st.setString(1, student);
+              
+              ResultSet rs = st.executeQuery();
+              
+              if(rs.next())
+              {
+                jobject.put("seminarCourses", rs.getInt(6));
+                jobject.put("mathcredits", rs.getInt(4));
+                jobject.put("researchCredits", rs.getInt(5));
+                jobject.put("totalCredits", rs.getString(2));
+                jobject.put("canGraduate", rs.getString(7));
+              }
+              rs.close();
+              
+            } 
+
+
+
+          return jobject.toString();
     }
+            
 
     // This is a hack to turn an SQLException into a JSON string error message. No need to change.
     public static String getError(SQLException e){
