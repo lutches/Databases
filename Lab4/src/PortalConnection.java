@@ -42,7 +42,7 @@ public class PortalConnection {
     // Register a student on a course, returns a tiny JSON document (as a String)
     public String register(String student, String courseCode)
     {
-      try (PreparedStatement registerStudent = conn.prepareStatement("INSERT INTO registrations VALUES (?,?);"))
+      try (PreparedStatement registerStudent = conn.prepareStatement("INSERT INTO registrations VALUES (?, ?);"))
         {
           registerStudent.setString(1, student);
           registerStudent.setString(2, courseCode);
@@ -51,18 +51,17 @@ public class PortalConnection {
         }
         catch (SQLException e)
           {
-            return String.format("{\"success\":false, \"error\":\""+getError(e)+"\"}");
+            return String.format("{\"success\": false, \"error\": \"%s\"}", getError(e));
           }
 
     }
     // Unregister a student from a course, returns a tiny JSON document (as a String)
     public String unregister(String student, String courseCode)
     {
-      try (PreparedStatement unregisterStudent = conn.prepareStatement("DELETE FROM registrations WHERE student='%s' AND course='%s'");)
+      try (Statement unregisterStudent = conn.createStatement();)
         {
-          unregisterStudent.setString(1, student);
-          unregisterStudent.setString(2, courseCode);
-          int updatedRows = unregisterStudent.executeUpdate();
+          String query = String.format("DELETE from registrations WHERE student ='%s' AND course ='%S'", student, courseCode);
+          int updatedRows = unregisterStudent.executeUpdate(query);
           if (updatedRows > 0)
             return String.format("{\"sucess\": true}");
           else
@@ -73,6 +72,7 @@ public class PortalConnection {
             return String.format("{\"sucess\": false, \"error\": \"%s\"}", getError(e));
           }
     }
+
 
     // Return a JSON document containing lots of information about a student, it should validate against the schema found in information_schema.json
     public String getInfo(String student) throws SQLException
@@ -91,11 +91,11 @@ public class PortalConnection {
               
               if(rs.next())
               {
-                jobject.put("Student", rs.getString(1));
-                jobject.put("Name", rs.getString(2));
-                jobject.put("Login", rs.getString(3));
-                jobject.put("Program", rs.getString(4));
-                jobject.put("Branch", rs.getString(5));
+                jobject.put("student", rs.getString(1));
+                jobject.put("name", rs.getString(2));
+                jobject.put("login", rs.getString(3));
+                jobject.put("program", rs.getString(4));
+                jobject.put("branch", rs.getString(5));
               }
               rs.close();
               
@@ -113,12 +113,12 @@ public class PortalConnection {
               while(rs.next())
               {
                 JSONObject jarrobject = new JSONObject();
-                jarrobject.put("Course", rs.getString(6));
-                jarrobject.put("Code", rs.getString(2));
-                jarrobject.put("Credits", rs.getDouble(4));
-                jarrobject.put("Grade", rs.getString(3));
+                jarrobject.put("course", rs.getString(6));
+                jarrobject.put("code", rs.getString(2));
+                jarrobject.put("credits", rs.getDouble(4));
+                jarrobject.put("grade", rs.getString(3));
               
-                jobject.append("Finished", jarrobject);
+                jobject.append("finished", jarrobject);
               }
               rs.close();
             }
@@ -135,17 +135,17 @@ public class PortalConnection {
               {
                 String status = rs.getString(3);
                 JSONObject jarrobject = new JSONObject();
-                jarrobject.put("Course name", rs.getString(1));
-                jarrobject.put("Course code", rs.getString(2));
-                jarrobject.put("Registration status", status);
+                jarrobject.put("course", rs.getString(1));
+                jarrobject.put("code", rs.getString(2));
+                jarrobject.put("status", status);
 				              if (status.equals("waiting"))
                 {
-					            jarrobject.put("Position", rs.getInt(4));
+					            jarrobject.put("position", rs.getInt(4));
 				        }
 	
 
               
-                jobject.append("Registered", jarrobject);
+                jobject.append("registered", jarrobject);
               }
               rs.close();
             }
