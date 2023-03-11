@@ -42,35 +42,39 @@ public class PortalConnection {
     // Register a student on a course, returns a tiny JSON document (as a String)
     public String register(String student, String courseCode)
     {
-      try (PreparedStatement registerStudent = conn.prepareStatement("INSERT INTO registrations VALUES (?, ?);"))
+      String returnText = " ";
+      try (PreparedStatement registerStudent = conn.prepareStatement("INSERT INTO Registrations (student, course) VALUES (?, ?)"))
         {
           registerStudent.setString(1, student);
           registerStudent.setString(2, courseCode);
           registerStudent.executeUpdate();
-          return "{\"Sucess\" : True}";
+          returnText = "{\"success\":true}";
+        } 
+        catch (SQLException e) 
+        {
+          returnText = String.format("{\"success\":false, \"error\":\"%s\"}", getError(e));
         }
-        catch (SQLException e)
-          {
-            return String.format("{\"success\": false, \"error\": \"%s\"}", getError(e));
-          }
-
+  
+        return returnText ;
     }
     // Unregister a student from a course, returns a tiny JSON document (as a String)
     public String unregister(String student, String courseCode)
     {
+      String returnText = (" ");
       try (Statement unregisterStudent = conn.createStatement();)
         {
           String query = String.format("DELETE from registrations WHERE student ='%s' AND course ='%S'", student, courseCode);
           int updatedRows = unregisterStudent.executeUpdate(query);
           if (updatedRows > 0)
-            return String.format("{\"sucess\": true}");
+            returnText = String.format("{\"success\":true}");
           else
-            return String.format("{\"success\":false, \"error\":\"Not registered to course\"}");
+            returnText = String.format("{\"success\":false, \"error\":\"Not registered to course\"}");
         }
         catch (SQLException e)
           {
-            return String.format("{\"sucess\": false, \"error\": \"%s\"}", getError(e));
+            returnText = String.format("{\"sucess\": false, \"error\": \"}", getError(e));
           }
+          return returnText; 
     }
 
 
@@ -171,7 +175,6 @@ public class PortalConnection {
             } 
 
 
-          System.out.println(jobject);
           return jobject.toString();
     }
             
